@@ -410,7 +410,7 @@ function coerce(k, v, schema, instance) {
     case 'int': v = parseInt(v, 10); break
     case 'port_or_windows_named_pipe': v = isWindowsNamedPipe(v) ? v : parseInt(v, 10); break
     case 'number': v = parseFloat(v); break
-    case 'boolean': v = String(v).toLowerCase() !== 'false'; break
+    case 'boolean': v = parseBoolean(v); break
     case 'array': v = v.split(','); break
     case 'object': v = JSON.parse(v); break
     case 'regexp': v = new RegExp(v); break
@@ -420,6 +420,14 @@ function coerce(k, v, schema, instance) {
   }
 
   return v
+}
+
+function parseBoolean(v) {
+  if (String(v).toLowerCase() === 'false') {
+    return false
+  }
+
+  return Boolean(v)
 }
 
 function loadFile(path) {
